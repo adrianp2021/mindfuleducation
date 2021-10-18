@@ -10,6 +10,9 @@ const Home = () => {
   const [product, setProduct] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchPrefix, setSearchPrefix] = useState("");
+  const [searchRating, setSearchRating] = useState('')
+
   const options = [
     { key: "o", text: "Outstanding", value: "outstanding" },
     { key: "g", text: "Good", value: "good" },
@@ -23,7 +26,11 @@ const Home = () => {
       setProduct(response.data.getColleges);
     });
   }, []);
-  console.log(product);
+  // console.log(product);
+
+  // const handleChange = (event) => {
+  //   setSearchPrefix(event.target.value);
+  // };
 
   return (
     <>
@@ -36,7 +43,14 @@ const Home = () => {
               setSearchTerm(event.target.value);
             }}
           />
-          <Form.Input fluid label="Prefix" />
+          <Form.Input
+            fluid
+            label="Prefix"
+            onChange=
+            {(event) => {
+              setSearchPrefix(event.target.value);
+            }}
+          />
           <Form.Select fluid label="Ofsted Rating" options={options} />
         </Form.Group>
         <Form.Button>Apply</Form.Button>
@@ -45,22 +59,17 @@ const Home = () => {
       <Table celled padded>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell singleLine>Partner</Table.HeaderCell>
+            <Table.HeaderCell>Partner</Table.HeaderCell>
             <Table.HeaderCell>Prefix</Table.HeaderCell>
             <Table.HeaderCell>Logo/Preroll</Table.HeaderCell>
             <Table.HeaderCell>Ofsted Rating</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         {product
-          .filter((val) => {
-            if (searchTerm === "") {
-              return val;
-            } else if (
-              val.name.toLowerCase().includes(searchTerm.toLowerCase())
-            ) {
-              return val;
-            }
-          })
+          // eslint-disable-next-line array-callback-return
+          .filter(item => item.groupPrefix.toLowerCase().includes(searchPrefix))
+          .filter(item => item.name.toLowerCase().includes(searchTerm))
+          .filter(item => item.ofstedRating.toLowerCase().includes(searchTerm))
           .map((item) => {
             return (
               <>
